@@ -1,4 +1,5 @@
 "use client";
+import { PasswordInput } from "@/components/PasswordInput";
 import { Button } from "@/components/ui/button";
 import {
   Card,
@@ -8,9 +9,11 @@ import {
   CardHeader,
   CardTitle,
 } from "@/components/ui/card";
+import { Checkbox } from "@/components/ui/checkbox";
 import {
   Form,
   FormControl,
+  FormDescription,
   FormField,
   FormItem,
   FormLabel,
@@ -36,6 +39,10 @@ export default function SignUpPage() {
     resolver: zodResolver(signUpSchema),
     defaultValues: {
       email: "",
+      password: "",
+      passwordConfirm: "",
+      companyName: "",
+      //   numberOfStudents: 0,
     },
   });
 
@@ -46,7 +53,8 @@ export default function SignUpPage() {
       data.companyName,
       data.numberOfStudents,
       data.password,
-      data.passwordConfirm
+      data.passwordConfirm,
+      data.acceptTerms
     );
   };
 
@@ -134,6 +142,7 @@ export default function SignUpPage() {
                             type="number"
                             min={0}
                             {...field}
+                            value={field.value ?? ""}
                           />
                         </FormControl>
                         <FormMessage />
@@ -149,10 +158,9 @@ export default function SignUpPage() {
                   <FormItem>
                     <FormLabel>Contraseña</FormLabel>
                     <FormControl>
-                      <Input
+                      <PasswordInput
                         autoComplete="new-password"
                         placeholder="********"
-                        type="password"
                         {...field}
                       />
                     </FormControl>
@@ -167,12 +175,37 @@ export default function SignUpPage() {
                   <FormItem>
                     <FormLabel>Confirmar contraseña</FormLabel>
                     <FormControl>
-                      <Input
-                        placeholder="********"
-                        type="password"
-                        {...field}
-                      />
+                      <PasswordInput placeholder="********" {...field} />
                     </FormControl>
+                    <FormMessage />
+                  </FormItem>
+                )}
+              />
+              <FormField
+                control={form.control}
+                name="acceptTerms"
+                render={({ field }) => (
+                  <FormItem>
+                    <div className="flex gpa-2 items-center">
+                      <FormControl>
+                        <Checkbox
+                          checked={field.value}
+                          onCheckedChange={field.onChange}
+                        />
+                      </FormControl>
+                      <FormLabel className="ml-1">
+                        Acepto los términos y condiciones
+                      </FormLabel>
+                    </div>
+                    <FormDescription>
+                      Al registrarte, aceptas los{" "}
+                      <Link
+                        href="/terminos-y-condiciones"
+                        className="text-primary hover:underline"
+                      >
+                        términos y condiciones
+                      </Link>
+                    </FormDescription>
                     <FormMessage />
                   </FormItem>
                 )}
